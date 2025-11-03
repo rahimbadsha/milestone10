@@ -1,0 +1,43 @@
+import React from 'react';
+import { useLoaderData } from 'react-router-dom';
+
+const UsersDetails = () => {
+    const user = useLoaderData()
+    console.log(user)
+
+    const handleEditUser = (e) => {
+        e.preventDefault();
+        const name = e.target.name.value
+        const email = e.target.email.value
+
+        console.log(name,email)
+        const updateUser = {name, email}
+
+        fetch(`http://localhost:3000/users/${user._id}`, {
+          method: "PATCH",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(updateUser),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("after update", data);
+          });
+    }
+
+    return (
+      <div>
+        <h3>Users Details</h3>
+        <form onSubmit={handleEditUser}>
+          <input type="text" name="name" id="" defaultValue={user.name} />
+          <br />
+          <input type="email" name="email" id="" defaultValue={user.email} />
+          <br />
+          <input type="submit" value="Add User" />
+        </form>
+      </div>
+    );
+};
+
+export default UsersDetails;
